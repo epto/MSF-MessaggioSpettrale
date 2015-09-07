@@ -55,6 +55,46 @@ I canali degli oscillatori non devono essere più vicini di 200Hz per mitigare g
 
 Le immagini vanno riprocessate aumentando il contrasto e dennendole di luminosità chiara. Altrimenti su Audacity non si vedono bene.
 
-Buoni messaggi antanici a tutti e la supercazzola alal prematurata con scappellamento a sinistra.
+## Ipotesi di protocollo
+
+Si consiglia di mettere sempre sync.png all'inizio. 
+In questo modo c'è una specie di monoscopio che consente di capire come deve essere impostato lo zoom per vedere bene il messaggio, se la dinamica è corretta ed anche le frequenze.
+
+Per le scrite tramite il parametro -e si consiglia di iniziare e finire con:
+\xdbO\xdb \xf3
+
+e
+
+\xf3 \xdbO\xdb
+
+La lettera "O" fa da monoscopio, il \xdb è il carattere pieno così si vedono tutti i canali e \xf3 è il fantasmino.
+(Se usate il font a1-8x8.font) altrimenti evitate \xf3.
+
+Tutti i font sono in codifica CP437, quindi occhio alle lettere accentate!
+
+### Un po di caratteri belli per il font a1-8x8.font
+
+\x02 Occhio (cerchio per monoscopio con punto i mezzo).
+\x08 Omino
+\x09 Donnetta
+\x0d Gatto
+\x16 Stella
+\x8c Pistola
+\x8e Macchina
+\x9b Smile
+\x9d Smile nero
+\xa2 Cestino della spazzatura
+\xa4 Computer
+\xa6 Orologio
+\xa7 Divieto
+\xa8 Pericolo
+\xad Informazioni (I)
+\xb7 Esclamazione
+\xf2 Vampiro
+\xf3 Fantasma
+
+
+
+Buoni messaggi antanici a tutti e la supercazzola alla prematurata con scappellamento a sinistra.
 
 
