@@ -1,0 +1,55 @@
+Il file deve essere in formato UTF-8 senza bom.
+Il bit acceso corrisponde al carattere █ oppure *.
+Il bit spento corrisponde allo spazio.
+In realtà si possono usare altri caratteri ASCII per accendere i bit.
+Per editare i font si consiglia diu usare geany.
+
+Comandi:
+@// = Commento
+@FH = Altezza del font (valori supportati 8 e 16).
+@CH = Inizio del carattere
+      Solitamente il primo valore decimanle è quello che conta. Dopo lo spazio il resto è fuffa!
+<Riga vuota> = Fine del carattere.
+
+Prima di tutto deve essere settata l'altezza del carattere con il comando @FH
+Poi per tutti i 256 caratteri si prosegue così:
+@CH <numero del caratter>
+Tutte le righe (otto caratteri)
+<riga vuota>
+
+Esempio:
+@FH 8
+@CH 0 ; 0x0
+        
+ ██████ 
+ ██████ 
+ ██████ 
+ ██████ 
+ ██████ 
+ ██████ 
+        
+
+------ ecc... ecc....
+L'ultima riga deve essere vuota.
+
+Il formato dei file binario:
+Font: 8x8 = 8 byte per carattere, 256 caratteri, bitmap.
+Font: 8x16 = 16 byte per carattere, 256 caratteri, bitmap.
+
+Se ti piacciono i vecchi font del MS-DOS cerca il file EGA.CPI ed estrai i caratteri tramite hex editor.
+Oppure usa le opzioni --lodsb --stosb di font-edit.php
+---------------------
+Per compilare un font:
+php font-edit.php --update sorgente.txt -o file.font
+
+Per editare un font:
+php font-edit.php --dump file.font -o sorgente.txt
+
+Per eseguire estrazioni di caratteri da un font all'altro:
+php font-edit-php -i fontDa.font -o /dev/null --stosb 65C,90C,alfabeto.bin
+Per inserirli:
+php font-edit.php -i fontDa.font -o fontNuovo.font --lodsb 65C,90C,alfabeto.bin
+
+
+
+
