@@ -75,26 +75,40 @@ Tutti i font sono in codifica CP437, quindi occhio alle lettere accentate!
 ### Un po di caratteri belli per il font a1-8x8.font
 
 \x02 Occhio (cerchio per monoscopio con punto i mezzo).
+
 \x08 Omino
+
 \x09 Donnetta
+
 \x0d Gatto
+
 \x16 Stella
+
 \x8c Pistola
+
 \x8e Macchina
+
 \x9b Smile
+
 \x9d Smile nero
+
 \xa2 Cestino della spazzatura
+
 \xa4 Computer
+
 \xa6 Orologio
+
 \xa7 Divieto
+
 \xa8 Pericolo
+
 \xad Informazioni (I)
+
 \xb7 Esclamazione
+
 \xf2 Vampiro
+
 \xf3 Fantasma
 
 
-
 Buoni messaggi antanici a tutti e la supercazzola alla prematurata con scappellamento a sinistra.
-
-
