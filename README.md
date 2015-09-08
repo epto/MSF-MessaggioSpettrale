@@ -109,4 +109,9 @@ Usa:
 
 Dove AAAA è il carattere di partenza, BBBB è il carattere che dovrebbe essere.
 
+## Esempio per l'uso con i caratteri estesi:
+```
+php text2wav.php -e -f fonts/rcuni-8x16-1628.font -o test.wav -t "TEST \(_invAZ)TEST\(_inv)1234\(_invaz)test\(_) LOL \(fantasma)"
+```
+
 Buoni messaggi antanici a tutti e la supercazzola alla prematurata con scappellamento a sinistra.
