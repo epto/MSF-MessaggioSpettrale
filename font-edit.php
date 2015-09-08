@@ -344,6 +344,24 @@ if (isset($par['u'])) {
 				$li=trim($li,' ');
 				list($a,$b,$c) = explode(' ',$li.'  ');
 				
+				if ($a=='@CHS') {
+					$a='@CHR';
+					$b=mb_convert_encoding($b,'UNICODE','UTF-8');
+					$b=unpack('n*',$b);
+					$b=$b[1];
+					$b='#'.$b;
+					}
+				
+				if ($a=='@RMAP') {
+					list($a,$z,$b,$c,$d) = explode(' ',$li.'     ');
+					$a='@CHR';
+					$c='UFFFF-U'.
+						substr(str_pad($b,4,'0',STR_PAD_LEFT),0,4).
+						'-U'. substr(str_pad($c,2,'0',STR_PAD_LEFT),0,2). 
+						substr(str_pad($d,2,'0',STR_PAD_LEFT),0,2);
+					$b=$z;
+					}
+				
 				if (isset($FONTINFOSTRUCTREV[$a])) {
 					if (@$FONTINFOSTRUCT[ @$FONTINFOSTRUCTREV[$a] ][3]) {
 						list($a,$b)=explode(' ',$li.' ',2);

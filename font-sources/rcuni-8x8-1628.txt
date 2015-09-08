@@ -14,17 +14,84 @@
 @//along with this source code; if not, write to the Free Software
 @//Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 @//
-@CP CP850
+@CP UTF-8
 @FH 8
 @MAX 1628
 @VER 1
 @MOD 3
-@CHR _norm     UFFFF-U0000-U0000
-@CHR _inv09    UFFFF-U03FE-U0030
 @CHR $START    U00DB-U0002-U00DB-U0020-U00F3-U0020
 @CHR $STOP     U0020-U00DB-U0002-U00DB
 @NAME RCUNI
 @INF (C) 2001 by EPTO (License GPL3)
+@RMAP _bold     0223 33 7E
+@RMAP _invAZ    03cf 40 5A
+@RMAP _inv      03EF 20 3F
+@RMAP _invaz    0450 61 7A
+@CHR RC		U0001
+@CHR VS		U0002
+@CHR VG		U0003
+@CHR CV		U0004
+@CHR NRC	U0005
+@CHR CRC	U0006
+@CHR FDRC	U0007
+@CHR uomo	U0008
+@CHR donna	U0009
+@CHR gatto	U000D
+@CHR pentola	U000F
+@CHR lupo	U0012
+@CHR contrasto	U0013
+@CHR GVS	U0014
+@CHR stells	U0016
+@CHR speaker	U0017
+@CHR schacchi	U00c7
+@CHR linee/	U00cb
+@CHR linee\	U00cc
+@CHR schacchi2	U00d7
+@CHR quadrato	U00DB
+@CHR smile2	U00fc
+@CHR cuori	U00FD
+@CHR fiori	U00fe
+@CHR picche	U00ff
+@CHR cerchio	U0102
+@CHR stella2	U0108
+@CHR pistola	U0126
+@CHR macchina	U0128
+@CHR floppy	U0134
+@CHR smile	U0135
+@CHR lire	U0136
+@CHR smile3	U0137
+@CHR cestino	U013c
+@CHR lampadina	U013d
+@CHR pc		U013e
+@CHR orologio	U0140
+@CHR divieto	U0141
+@CHR pericolo	U0142
+@CHR info	U0147
+@CHR quadri	U014f
+@CHR esclama	U0151
+@CHR copyright	U0152
+@CHR cesso	U0176
+@CHR grappa	U0177
+@CHR sigaretta	U017b
+@CHR faccina	U017d
+@CHR vampiro	U018a
+@CHR fantasma	U018b
+@CHR fiori2	U0199
+@CHR X		U03a7
+@CHR quadrato2	U0637
+@CHR quadrato3	U0638
+@CHR ...	U063e
+@CHR quadrato+	U063f
+@CHR quadrato.	U0640
+@CHR quadrato2+	U0641
+@CHR quadrato-	U0642
+@CHS é U01a8
+@CHS à U01ab
+@CHS è U01b0
+@CHS ì U01b3
+@CHS É U01b8
+@CHS ù U01bd
+@CHS ò U01bb
 @CH 0 ; 0x0
         
         
