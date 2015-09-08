@@ -72,43 +72,48 @@ La lettera "O" fa da monoscopio, il \xdb è il carattere pieno così si vedono t
 
 Tutti i font sono in codifica CP437, quindi occhio alle lettere accentate!
 
-### Un po di caratteri belli per il font a1-8x8.font
+### Supporto unicode, simboli e caratteri.
 
-\x02 Occhio (cerchio per monoscopio con punto i mezzo).
+É stato reimplementato il supporto font92. Si tratta di un tipo di font che avevo fatto nel 1992 quando programmavo le mie prime interfacce grafiche in turbo assembler e Quick Basic.
 
-\x08 Omino
+Adesso text2wav supporta anche le seguenti estensioni:
 
-\x09 Donnetta
+Usare il parametro -e
 
-\x0d Gatto
+* Escape \xNN per impostare un carattere.
+* Escape \(#NNNN) per i caratteri unicode.
+* Escape \(nomeSimbolo) per i siboli con il nome (se supportati dal font).
+* Escape \(_sottoFont) e \(_) per impostare i sotto insiemi di caratteri (se supportati dal font).
+* Supporto di font con più di 256 caratteri. (Il font RCUNI da 1628 caratteri).
+* Rimappatura caratteri (per fon con codifiche strane).
+* Importazione di font RAW specificando il puntatore.
 
-\x16 Stella
+Quest'ultima opzione ti permette di incorporare i font che desideri.
 
-\x8c Pistola
+Se per esempio vuoi usare il font del Commodore 64, procurati la sua ROM. 
 
-\x8e Macchina
+Una volta individuato il font puoi usare le opzioni:
 
-\x9b Smile
+font-edit.php -i ROMCODE.C64 -p 16384 --cp ISO-8859-1 -o C64.font -m 512 -h 8
 
-\x9d Smile nero
+Poi:
 
-\xa2 Cestino della spazzatura
+font-edit.php --dump C64.font -o C64.txt
 
-\xa4 Computer
+Ricordati di rimappare i caratteri aggiungendo dei parametri al sorgente come mappa caratteri:
 
-\xa6 Orologio
+@MOD 3
 
-\xa7 Divieto
+@CHR #AAAA UBBBB
 
-\xa8 Pericolo
+Dove AAAA è il carattere in ingresso su (ISO-8859-1) e BBBB è il carattere nel font.
 
-\xad Informazioni (I)
+Grazie all'opzione @MOD 3 puoi anche settare degli intervalli per rimappare serie di caratteri dandogli un nome.
 
-\xb7 Esclamazione
+Usa:
 
-\xf2 Vampiro
+@CHR _nome UFFFF-UAAAA-UBBBB
 
-\xf3 Fantasma
-
+Dove AAAA è il carattere di partenza, BBBB è il carattere che dovrebbe essere.
 
 Buoni messaggi antanici a tutti e la supercazzola alla prematurata con scappellamento a sinistra.
