@@ -86,27 +86,26 @@ Quest'ultima opzione ti permette di incorporare i font che desideri.
 Se per esempio vuoi usare il font del Commodore 64, procurati la sua ROM. 
 
 Una volta individuato il font puoi usare le opzioni:
-
+```
 font-edit.php -i ROMCODE.C64 -p 16384 --cp ISO-8859-1 -o C64.font -m 512 -h 8
-
+```
 Poi:
-
+```
 font-edit.php --dump C64.font -o C64.txt
-
+```
 Ricordati di rimappare i caratteri aggiungendo dei parametri al sorgente come mappa caratteri:
-
+```
 @MOD 3
-
 @CHR #AAAA UBBBB
-
+```
 Dove AAAA è il carattere in ingresso su (ISO-8859-1) e BBBB è il carattere nel font.
 
 Grazie all'opzione @MOD 3 puoi anche settare degli intervalli per rimappare serie di caratteri dandogli un nome.
 
 Usa:
-
+```
 @CHR _nome UFFFF-UAAAA-UBBBB
-
+```
 Dove AAAA è il carattere di partenza, BBBB è il carattere che dovrebbe essere.
 
 ## Esempio per l'uso con i caratteri estesi:
