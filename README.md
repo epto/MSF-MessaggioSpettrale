@@ -100,6 +100,12 @@ Ricordati di rimappare i caratteri aggiungendo dei parametri al sorgente come ma
 ```
 Dove AAAA è il carattere in ingresso su (ISO-8859-1) e BBBB è il carattere nel font.
 
+Puoi anche usare:
+```
+@CHS Á UBBBB
+```
+Dovve Á è il carattere (in UTF-8) da rimappare, e BBBB è quello nel font.
+
 Grazie all'opzione @MOD 3 puoi anche settare degli intervalli per rimappare serie di caratteri dandogli un nome.
 
 Usa:
@@ -107,6 +113,12 @@ Usa:
 @CHR _nome UFFFF-UAAAA-UBBBB
 ```
 Dove AAAA è il carattere di partenza, BBBB è il carattere che dovrebbe essere.
+
+Puoi anche usare:
+```
+@RMAP _nome AAAA BB CC
+```
+Dove AAAA è il primo carattere nel font e BB-CC è l'intervallo di caratteri da rimappare.
 
 ## Esempio per l'uso con i caratteri estesi:
 ```
