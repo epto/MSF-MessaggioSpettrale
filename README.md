@@ -98,8 +98,6 @@ Ricordati di rimappare i caratteri aggiungendo dei parametri al sorgente come ma
 @MOD 3
 @CHR #AAAA UBBBB
 ```
-Dove AAAA è il carattere in ingresso su (ISO-8859-1) e BBBB è il carattere nel font.
-
 Puoi anche usare:
 ```
 @CHS Á UBBBB
@@ -110,10 +108,8 @@ Grazie all'opzione @MOD 3 puoi anche settare degli intervalli per rimappare seri
 
 Usa:
 ```
-@CHR _nome UFFFF-UAAAA-UBBBB
+@CHR _nome UFFFF-UAAAA-UBBCC
 ```
-Dove AAAA è il carattere di partenza, BBBB è il carattere che dovrebbe essere.
-
 Puoi anche usare:
 ```
 @RMAP _nome AAAA BB CC
