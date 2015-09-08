@@ -81,32 +81,36 @@ function WaveHeader(&$f,$sampleRate) { // Inizializza e finalizza un file wave.
 
 ////////////// Sezione font e caratteri.
 
-function charBmp(&$font,$ch) {	// Da carattere a relativa bitmap (Array MxN).
-	global $fontHeight;
-	$bp = $ch*$fontHeight;
+/*
+ * Il tag delle informazioni sui font è un sistema prodotto nel 1992
+ * per salvare informazioni sui font bitmap.
+ * Parte del supporto è stato rimosso (font più o meno larghi di 8 pixel).
+ * */
+ 
+$FONTINFOSTRUCT = array(		//	Struttura costante per le informazioni sui caratteri.
+//			       Nome         Len  
+	1	=>	array('charset'     ,0 ) ,
+	2	=>	array('height'      ,1 ) ,
+	3	=>	array('max'         ,2 ) ,
+	4	=>	array('info'        ,0 ) ,
+	5	=>	array('ver'         ,1 ) ,
+	6	=>	array('name'        ,0 ) ,
+	7	=>	array('map'         ,0 ) ,
+	8	=>	array('mode'        ,1 ) )
+	;
 	
-	$bmp = substr($font,$bp,$fontHeight);
-	$map = array_pad(array(),8,array_pad(array(),$fontHeight,0));
-	for ($y = 0 ;$y<$fontHeight;$y++) {
+function charBmp(&$font,$ch) {	// Da carattere a relativa bitmap (Array MxN).
+	$bp = ($ch % $font['max'])*$font['height'];
+	
+	$bmp = substr($font['font'],$bp,$font['height']);
+	$map = array_pad(array(),8,array_pad(array(),$font['height'],0));
+	for ($y = 0 ;$y<$font['height'];$y++) {
 		for ($x=0;$x<8;$x++) {
-			$bit = ord($bmp[($fontHeight-1) - $y]) & 1<<(7^$x);
+			$bit = ord($bmp[($font['height']-1) - $y]) & 1<<(7^$x);
 			$map[$x][$y] = $bit ? 1:0;
 			}
 		}
 	return $map;
-	}
-
-function showChar($map,$ch) {	// Visualizza il carattere per --dump-font
-	global $fontHeight;
-	echo str_pad($ch.' '.dechex($ch),8,' ')."\n";
-	for ($y=0;$y<$fontHeight;$y++) {
-		for ($x=0;$x<8;$x++) {
-			$b = $map[$x][($fontHeight-1)^$y];
-			echo $b ? '█' : ' ';
-			}
-		echo "\n";
-		}
-	echo "\n";
 	}
 
 function addBmp(&$org,$map) {	// Aggiunge alla bitmap finale la bitmap di un carattere.
@@ -114,6 +118,85 @@ function addBmp(&$org,$map) {	// Aggiunge alla bitmap finale la bitmap di un car
 	$dx=$cx+8;
 	$ex=0;
 	for ($i=$cx;$i<$dx;$i++) $org[$i]=$map[$ex++];
+	}
+
+function data2Map($raw) {	//	Esporta un array nome => valore
+	$map=array();
+	$j = strlen($raw);
+	$i = 0;
+	for ($fi=0;$fi<$j;$fi++) {
+		$cx=ord($raw[$i++]);
+		if ($cx==0) break;
+		$t0='';
+		for ($si = 0; $si<$cx; $si++) {
+			$t0.=$raw[$i++];
+			}
+		$cx=ord($raw[$i++]);
+		$t1='';
+		for ($si = 0; $si<$cx; $si++) {
+			$t1.=$raw[$i++];
+			}
+		$map[$t0]=$t1;
+		}
+	return $map;
+	}
+
+function getFontInfo(&$font) {	// Legge il tag delle informazioni sui caratteri.
+	global $FONTINFOSTRUCT;
+	
+	$bp = strlen($font)-1;
+	if ($bp<6) return false;
+	$t0 = substr($font,$bp-5);
+	if (strpos($t0,'INFO')===2) {
+		$t0 = unpack('v',$t0);
+		$t0 = $t0[1];
+		$bp -=$t0;
+		$bp-=4;
+		if ($bp<5 or $bp>strlen($font)) return false; 
+		$t0 = substr($font,$bp);
+		$info=array();
+		$j = strlen($t0);
+		$i=0;
+		for ($fi=0;$fi<$j;$fi++) {
+			$ch=ord($t0[$i++]);
+			if ($ch==0) break;
+			if (isset($FONTINFOSTRUCT[$ch])) {
+					$ji = $t0[$i++].$t0[$i++];
+					$ji = unpack('v',$ji);
+					$ji = $ji[1];
+					
+					$t1='';
+					for ($ii=0;$i<$j && $ii<$ji;$ii++) {
+						$t1.=$t0[$i++];
+						}
+					$ji = $FONTINFOSTRUCT[$ch][1];
+					if ($ji>0) {
+						$t1=str_pad($t1,2,chr(0),STR_PAD_RIGHT);
+						$t1=unpack('v',$t1);
+						$t1=$t1[1];
+						}
+					$info[ $FONTINFOSTRUCT[$ch][0] ] = $t1;
+				} else {
+					$ji = ord($t0[$i++]);
+					$i+=$ji;
+				}
+			}
+		$font = substr($font,0,$bp);
+		return $info;
+		} else return false;
+	}
+
+function loadFont($file) { // Carica un font
+	$font = file_get_contents($file) or die("Errore nel file font.\n");
+	$inf = getFontInfo($font);
+	if (!is_array($inf)) $inf=array('ver' => 1);
+	if (!isset($inf['max'])) $inf['max']=256;
+	if (!isset($inf['charset'])) $inf['charset']='CP437';
+	if (!isset($inf['height'])) $inf['height'] = strlen($font) >=3072 ? 16: 8; // 8x256 byte = font 8x8, 16x256 byte = font 8x16. Ho messo una via di mezzo perchè alcuni file hanno roba alla fine.
+	if (isset($inf['map'])) $inf['map'] = data2Map($inf['map']);
+	$inf['font'] = $font;
+	$font=null;
+	return $inf;
 	}
 
 /////////// Sezione socillatori.
@@ -147,8 +230,30 @@ function valu($x) { // Legge/verifica un valore in ingresso.
 	return $x;
 	}
 
+function parser($txt,$Sx='\\(',$Dx=')') {	// Parsa una stringa in token
+	$sxl=strlen($Sx);
+	$dxl=strlen($Dx);
+	$o=array();
+	$j = strlen($txt);
+	for ($i=0;$i<$j;$i++) {
+		$p = strpos($txt,$Sx);
+		if ($p!==false) {
+		        $o[] = array(0,substr($txt,0,$p));
+		        $txt = substr($txt,$p+$sxl);
+		        $f = strpos($txt,$Dx);
+		        if ($f!==false) {
+			        $t = substr($txt,0,$f);
+			        $txt=substr($txt,$f+$dxl);
+			        $o[] = array(1,$t);
+				}
+			} else break; 
+		}
+	if (strlen($txt)>0) $o[] = array(0,$txt);
+	return $o;
+	}
+
 // Uso getopt, non è il metodo migliore. Usare con cura!
-$par = getopt("f:t:r:b:s:p:ho:elR:bNOW",array('file:','dump-font'));
+$par = getopt("f:t:r:b:s:p:ho:elR:bNOWc:P",array('file:'));
 
 // Guida con -h -? oppure senza argomenti.
 if ($par===false or isset($par['h']) or @$argv[1]=='-?' or count($argv)<2) {
@@ -166,9 +271,16 @@ if ($par===false or isset($par['h']) or @$argv[1]=='-?' or count($argv)<2) {
 	echo "  -s\tImposta la distanza in hertz delle frequenze.\n";
 	echo "  -p\tImposta la lunghezza (hertz o secondi) dei pixel.\n";
 	echo "  -e\tInterpreta i backslash: \xNN \\t \\r \\n \\0 \\n \\\\\n";
+	echo "    \tQuesta opzione interpreta anche i simboli con il nome:\n";
+	echo "    \tEsempio simbolo: \\(quadrato)\n";
+	echo "    \tEsempio unicode: \\(#00DB)\n";
+	echo "    \t(Usare font-edit per vedere la lista dei simboli).\n\n";
 	echo "  -l\tImposta l'unità di misura in secondi per -p\n";
 	echo "  -N\tConverte CR, LF e TAB in semplici spazi ed elimina gli spazi mutipli.\n";
 	echo "  -O\tInvia l'output sullo standrard output.\n";
+	echo "  -P\tUsa il protocollo con \$START e \$STOP\n";
+	echo "  -c\tImposta il charset per la conversione:\n";
+	echo "    \t-c <da> -c <da,a>\n\n";
 	echo "  -W\tCrea un file RAW.\n";
 	echo "\nAltri comandi:\n";
 	echo "  --file\tPrende il testo da un file binario.\n";
@@ -177,16 +289,8 @@ if ($par===false or isset($par['h']) or @$argv[1]=='-?' or count($argv)<2) {
 	}
 
 if (!@$par['f']) die("Manca -f\n");
-$font = file_get_contents($par['f']) or die("\nErrore nel file del font!\n");
-$fontHeight= strlen($font) >=3072 ? 16: 8; // 8x256 byte = font 8x8, 16x256 byte = font 8x16. Ho messo una via di mezzo perchè alcuni file hanno roba alla fine.
-
-if (isset($par['dump-font'])) { // Visualizza tutto il set di caratteri.
-	for ($a = 0;$a<255;$a++) {
-		$map = charBmp($font,$a);
-		showChar($map,$a);
-		}
-	exit;
-	}
+$font = loadFont($par['f']) or die("\nErrore nel file del font!\n");
+$fontHeight= $font['height'];
 
 if (!@$par['o'] and !isset($par['O'])) die("Manca -o\n");
 
@@ -196,8 +300,6 @@ if (@$par['file']) {
 		if (!@$par['t']) die("Manca -t\n");
 		$text=$par['t'];
 	}
-
-if (isset($par['e'])) $text=stripcslashes($text);
 
 // Parametri di default.
 
@@ -213,19 +315,20 @@ if ($fontHeight==16) {	//	Aggiustamento per font 8x16.
 	$baseFreq=400;
 	}
 
-// Lettura dei parametri e veriifche varie.
+// Lettura dei parametri e verifiche varie.
 if (isset($par['r'])) $sampleRate = valu($par['r']);
 if (isset($par['b'])) $baseFreq = valu($par['b']);
 if (isset($par['s'])) $stepFreq = valu($par['s']);
 if (isset($par['p'])) $pixelFreq = valu($par['p']);
 if (isset($par['l'])) $pixelFreq = 1 / $pixelFreq;
+if (isset($par['O'])) $par['W']=true;
 
 if ($pixelFreq>$baseFreq) die("Parametri di frequenza non validi: pixel > base\n");
 if ($baseFreq>($sampleRate/2)) die("Parametri di frequenza non validi: base > bandwidth\n");
 if (($baseFreq + ($fontHeight*$stepFreq))>($sampleRate/2)) die("Parametri di frequenza non validi: siamo fuori banda.\n");
 
-if (isset($par['N'])) {
-	$text=str_replace(array("\t","\r\n","\r","\n"),' ',$text);
+if (isset($par['N'])) { // Rimuove spazi, cr, lf, tab.
+	$text=str_replace(array("\t","\r","\n"),' ',$text);
 	while(strpos($text,'  ')!=='') $text=str_replace('  ',' ',$text);
 	}
 
@@ -234,9 +337,85 @@ if (!isset($par['W'])) WaveHeader($fout,$sampleRate);	// Inizializza il file com
 
 $map=array();	// Questo array contiene la bitmap finale.
 
-$j=strlen($text);	// Tipo ciclo for per convertire la stringa.
-for ($i=0;$i<$j;$i++) {
-		addBmp($map,charBmp($font,ord($text[$i])));	// Aggiungi ogni bitmap di ogni carattere alla bitmap finale.
+//Conversione codifica caratteri.
+$encIn = 'UTF-8';
+$encOut= 'CP850';
+if (isset($font['charset'])) $encOut=$font['charset'];
+if (isset($par['c'])) {
+	list($a,$b)=explode(',',$par['c'].','.$encOut);
+	$text = mb_convert_encoding($text,$encIn,$encOut);
+	}
+
+// Start e stop.
+if (isset($par['P'])) {
+	$par['e']=true;
+	$text='\\($START)'.$text.'\\($STOP)';
+	}
+
+// Modalità speciali.
+$fMod = isset($font['mode']) && $font['mode']&1 && isset($font['map']);	// Rimappatura caratteri
+$fBas = isset($font['mode']) && $font['mode']&2 && isset($font['map']); // Offset caratteri.
+if ($fBas) $font['map']['_'] = "\xff\xff\x00\x00\x00\x00"; // Offset di sistema.
+
+if (isset($par['e'])) { // Elabora le sezioni \( ... )
+	$t0 = parser($text);
+	$text='';
+	foreach($t0 as $tok) {
+		if ($tok[0]) {
+			
+			if (@$tok[1][0]=='#') { // \(#xxxx) Carattere unicode
+				$t0 = hexdec(substr($tok[1],1));
+				$text.=pack('n',$t0 & 0xFFFF);
+				continue;
+				}
+			
+			if (
+					@$tok[1][0]!='$' and (  // Rimappatura interna
+						!isset($font['map']) or 
+						!isset($font['map'][$tok[1]]
+						)
+					)
+				) die("Stringa non definita: `{$tok[1]}`\n");
+				
+			$text.=$font['map'][$tok[1]];
+			} else {
+			$tok[1]=stripcslashes($tok[1]);		
+			$text.=mb_convert_encoding($tok[1],'UNICODE',$encOut);
+			}
+		}	
+	} else $text= mb_convert_encoding($text,'UNICODE',$encOut);
+
+$text=unpack('n*',$text);
+
+if ($fBas) { // Elabora la modalità offset con UFFFF
+	$j=count($text)+1;	
+	$out=array(0);
+	$base=0;
+	for ($i=0;$i<$j;$i++) {
+		$ch = $text[$i];
+		if ($ch==65535) {
+			$i++;
+			$base = ($text[$i++] - $text[$i]) & 0xFFFF;
+			continue;
+			}
+		$out[] = ($ch+$base) & 0xFFFF;
+		}
+	$text=$out;
+	}
+	
+$j=count($text)+1;	// Tipo ciclo for per convertire la stringa.
+
+for ($i=1;$i<$j;$i++) {
+	
+		if ($fMod) {
+			$id = '@'.str_pad(dechex($text[$i]),4,'0',STR_PAD_LEFT);
+			if (isset($font['map'][$id])) {
+				$t0=unpack('n',$map[$id]);
+				$text[$i] = $t0[1];
+				}
+			}
+			
+		addBmp($map,charBmp($font,$text[$i]));	// Aggiungi ogni bitmap di ogni carattere alla bitmap finale.
 	}
 
 $imgWidth=count($map); // Trova la larghezza della bitmap.
@@ -257,7 +436,7 @@ $maxRept=1;
 
 if (isset($par['R'])) $maxRept=abs(intval($par['R'])); // C'è la possibilità di ripetere la stringa.
 
-for ($rept=0;$rept<$maxRept;$rept++) {	// Per ongi ripetizione, tipicamente 1.
+for ($rept=0;$rept<$maxRept;$rept++) {	// Per ogni ripetizione, tipicamente 1.
 	for ($x = 0 ;$x<$sndWidth;$x++) {	// Da sinistra a destra.
 		$q=0; // Valore PCM corrente.
 		

@@ -1,4 +1,4 @@
-@// Copyright (C) 1992 by EPTO
+@// Copyright (C) 1994 by EPTO
 @//
 @//This is free software; you can redistribute it and/or modify
 @//it under the terms of the GNU General Public License as published by
@@ -14,7 +14,44 @@
 @//along with this source code; if not, write to the Free Software
 @//Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 @//
+@CP CP850
 @FH 8
+@MAX 256
+@VER 2
+@NAME A1
+@CHR ochio     U0002
+@CHR uomo      U0008
+@CHR donna     U0009
+@CHR gatto     U000D
+@CHR pentola   U000F
+@CHR stella    U0016
+@CHR pistola   U008C
+@CHR macchina  U008E
+@CHR floppy    U009A
+@CHR smile     U009B
+@CHR smile2    U009D
+@CHR cestino   U00A2
+@CHR lampadina U00A3
+@CHR pc        U00A4
+@CHR orologio  U00A6
+@CHR divieto   U00A7
+@CHR pericolo  U00A8
+@CHR info      U00AD
+@CHR cuori     U00B6
+@CHR quadri    U00B5
+@CHR fiori     U00B4
+@CHR picche    U00B3
+@CHR esclama   U00B7
+@CHR cesso     U00DD
+@CHR grappa    U00DE
+@CHR speaker   U003E
+@CHR faccia    U00E4
+@CHR vampiro   U00F2
+@CHR fantasma  U00F3
+@CHR quadrato  U00DB
+@CHR $START    U00DB-U0002-U00DB-U0020-U00F3-U0020
+@CHR $STOP     U0020-U00DB-U0002-U00DB
+@INF (C) 1992 by EPTO (License GPL3)
 @CH 0 ; 0x0
         
  ██████ 

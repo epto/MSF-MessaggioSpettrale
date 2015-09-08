@@ -14,7 +14,27 @@
 @//along with this source code; if not, write to the Free Software
 @//Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 @//
+@CP CP850
 @FH 8
+@MAX 256
+@VER 2
+@NAME MSX
+@INF (C) 1994 by EPTO (License GPL3)
+@CHR smile         U0001
+@CHR smile2        U0002
+@CHR quori         U0003
+@CHR quadri        U0004
+@CHR fiori         U0006
+@CHR picche        U0007
+@CHR stella        U000F
+@CHR pieno         U00DB
+@CHR cerchio       U0009
+@CHR scacchi       U00C1
+@CHR scacchi2      U00C7
+@CHR righe/        U00CB
+@CHR righe\        U00CC
+@CHR $START        U00DB-U0009-U00DB-U0020
+@CHR $STOP         U0020-U00DB
 @CH 0 ; 0x0
         
         
