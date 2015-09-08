@@ -60,15 +60,8 @@ Le immagini vanno riprocessate aumentando il contrasto e aumentandone la luminos
 Si consiglia di mettere sempre sync.png all'inizio. 
 In questo modo c'è una specie di monoscopio che consente di capire come deve essere impostato lo zoom per vedere bene il messaggio, se la dinamica è corretta ed anche le frequenze.
 
-Per le scrite tramite il parametro -e si consiglia di iniziare e di finire con:
-\xdbO\xdb \xf3
-
-e
-
-\xf3 \xdbO\xdb
-
-La lettera "O" fa da monoscopio, il \xdb è il carattere pieno così si vedono tutti i canali e \xf3 è il fantasmino.
-(Se usate il font a1-8x8.font) altrimenti evitate \xf3.
+Con il parametro -P che implica -e si aggiungono i terminatori di protocollo (se supportati dai font).
+Sono i simboli \\(\$START) e \\(\$STOP)
 
 Tutti i font sono in codifica CP437, quindi occhio alle lettere accentate!
 
@@ -83,7 +76,7 @@ Usare il parametro -e
 * Escape \\xNN per impostare un carattere.
 * Escape \\(#NNNN) per i caratteri unicode.
 * Escape \\(nomeSimbolo) per i siboli con il nome (se supportati dal font).
-* Escape \\(_sottoFont) e \\(\_) per impostare i sotto insiemi di caratteri (se supportati dal font).
+* Escape \\(_sottoFont) per impostare i sotto insiemi di caratteri (se supportati dal font).
 * Supporto di font con più di 256 caratteri. (Il font RCUNI da 1628 caratteri).
 * Rimappatura caratteri (per fon con codifiche strane).
 * Importazione di font RAW specificando il puntatore.
