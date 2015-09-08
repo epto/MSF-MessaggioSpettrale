@@ -283,8 +283,7 @@ if ($par===false or isset($par['h']) or @$argv[1]=='-?' or count($argv)<2) {
 	echo "    \t-c <da> -c <da,a>\n\n";
 	echo "  -W\tCrea un file RAW.\n";
 	echo "\nAltri comandi:\n";
-	echo "  --file\tPrende il testo da un file binario.\n";
-	echo "  --dump-font\tStampa il font usando i caratteri grafici UTF-8.\n\n";
+	echo "  --file\tPrende il testo da un file binario.\n\n";
 	exit;
 	}
 
