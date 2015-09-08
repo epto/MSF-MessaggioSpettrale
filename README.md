@@ -61,7 +61,7 @@ Si consiglia di mettere sempre sync.png all'inizio.
 In questo modo c'è una specie di monoscopio che consente di capire come deve essere impostato lo zoom per vedere bene il messaggio, se la dinamica è corretta ed anche le frequenze.
 
 Con il parametro -P che implica -e si aggiungono i terminatori di protocollo (se supportati dai font).
-Sono i simboli \\(\$START) e \\(\$STOP)
+Sono i simboli \\($START) e \\($STOP)
 
 Tutti i font sono in codifica CP437, quindi occhio alle lettere accentate!
 
