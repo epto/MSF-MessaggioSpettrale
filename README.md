@@ -83,7 +83,7 @@ Usare il parametro -e
 * Escape \\xNN per impostare un carattere.
 * Escape \\(#NNNN) per i caratteri unicode.
 * Escape \\(nomeSimbolo) per i siboli con il nome (se supportati dal font).
-* Escape \\(_sottoFont) e \\(_) per impostare i sotto insiemi di caratteri (se supportati dal font).
+* Escape \\(_sottoFont) e \\(\_) per impostare i sotto insiemi di caratteri (se supportati dal font).
 * Supporto di font con più di 256 caratteri. (Il font RCUNI da 1628 caratteri).
 * Rimappatura caratteri (per fon con codifiche strane).
 * Importazione di font RAW specificando il puntatore.
