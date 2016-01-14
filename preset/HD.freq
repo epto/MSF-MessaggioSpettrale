@@ -1,0 +1,8 @@
+@Text2Wave.Freq=V1.0
+@info=Messaggio spettrale su HD modificato.
+@bandWidth=2600-5400
+@baseFreq=2600
+@pixelFreq=15
+@stepFreq=400
+@font=msx-8x8.font
+@noList
