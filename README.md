@@ -122,3 +122,14 @@ php text2wav.php -e -f fonts/rcuni-8x16-1628.font -o test.wav -t "TEST \(_invAZ)
 ```
 
 Buoni messaggi antanici a tutti e la supercazzola alla prematurata con scappellamento a sinistra.
+
+## Messaggi spettrali su Harddisk:
+
+Se anche a te come me piace far suonare le testine degli harddisk facendoli ridere o mandare messaggi spettrali, puoi divertirti con text2wav.php.
+Grazie al nuovo preset HD.freq usando solo le opzioni --freq, -t, -o, puoi registrare i tuoi messaggi direttamente dall'arddisk modificato.
+
+## Template ed esperimenti:
+
+Nella directory strumenti ci sono alcuni file per creare i template e fare degli esperimenti per trasmettere i messaggi spettrali su sistemi differenti.
+
+La prima cosa da fare è inviare il file bandwidthTest.wav e vedere dalle registrazioni quale è la distorsione e la banda passante. Altri esperimenti per testare la risoluzione possono essere fatti con gli appositi file resolutionTest.
