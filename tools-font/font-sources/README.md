@@ -21,7 +21,7 @@ Numero massimo di caratteri @MAX
 Comando @CHR nome codice
 ```
 
-Il codice è sempre nella forma U1234 dove 1234 è il numero del carattere nel font espresso in esadecimale e sempre in 4 cife.
+Il codice è sempre nella forma U1234 dove 1234 è il numero del carattere nel font espresso in esadecimale e sempre in 4 cifre.
 
 Esempio:
 ```
@@ -29,9 +29,12 @@ Esempio:
 ```
 ### Definire le sequenze con un nome:
 
-Comando @CHR nome sequenza
+Comando:
+```
+@CHR nome sequenza
+```
 
-Il nome inizia per ($) se si tratta di $START e $STOP che sono sequenze di apertura e chiusura del messaggio se supportato dal font.
+Il nome inizia per "$" se si tratta di $START e $STOP che sono sequenze di apertura e chiusura del messaggio se supportato dal font.
 Solitamente per font conenenti immagini è utile mettere un quadrato pieno, un cerchio, e un carattere a scacchi per permettere all'utente di capire se il messaggio è letto correttamente e senza distorisioni.
 
 La sequenza è un insieme di codici separati dal carattere "-". I codici iniziano per U e sono il numero del carattere nel font espresso come 4 cifre esadecimali.
@@ -43,15 +46,17 @@ Esempio:
 ```
 
 ### Rimappare i caratteri:
+Comando:
 ```
-Comando @CHS carattere codice
+@CHS carattere codice
 ```
 
 Il carattere è inserito direttamente, il codice è un numero esadecimale di 4 cifre (numero di carattere nel font).
 
 ### Rimappare gruppi di caratteri:
+Comando:
 ```
-Comando @RMAP nome     codice inizio fine
+@RMAP nome     codice inizio fine
 ```
 Il nome è il nome del gruppo (inizia per _), il codice è il numero del primo carattere nel font, espresso come 4 cifre esadecimali.
 I valori inizio e fine sono espressi in due cifre esadecimali. 
