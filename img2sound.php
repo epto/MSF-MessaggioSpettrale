@@ -31,6 +31,7 @@
  * Ad ongi picco degli oscillatori la frequenza è impostata a caso con scarto diqualche hertz.
  * I canali non sono equidistanti. In questo modo i battimenti sono mitigati al meglio.
  * */
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT & ~E_USER_WARNING &~E_NOTICE);
  
 function WaveChunk($name,$data) {
 	return str_pad($name,4,' ',STR_PAD_RIGHT).pack('V',strlen($data)).$data;	

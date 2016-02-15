@@ -40,7 +40,8 @@ $FONTINFOSTRUCT = array(		//	Struttura costante per le informazioni sui caratter
 	5	=>	array('ver'         ,1   ,'@VER'     ,false ) ,
 	6	=>	array('name'        ,0   ,'@NAME'    ,true)   ,
 	7	=>	array('map'         ,0   ,'@CHR'     ,false ) ,
-	8	=>	array('mode'        ,1   ,'@MOD'     ,false ) )
+	8	=>	array('mode'        ,1   ,'@MOD'     ,false ) ,
+	9	=>	array('width'		,1	 ,'@FW'		 ,false ) )
 	;
 
 $FONTINFOSTRUCTREV = array(		//	Comandi per i font.
@@ -52,7 +53,8 @@ $FONTINFOSTRUCTREV = array(		//	Comandi per i font.
 	'@VER'	=>	5,
 	'@NAME'	=>	6,
 	'@CHR'	=>	0,
-	'@MOD'  =>  8)
+	'@MOD'  =>  8,
+	'@FW'	=>	9)
 	;
 
 /*
@@ -214,7 +216,7 @@ function showChar($map,$ch) {	// Estrae il carattere.
 	}
 
 // Uso getopt, non è il metodo migliore. Usare con cura!
-$par = getopt("i:u:o:p:h:m:",array('dump:','update:','show-map:','cp:'));
+$par = getopt("i:u:o:p:h:m:N",array('dump:','update:','show-map:','cp:'));
 
 // Guida con -h -? oppure senza argomenti.
 if ($par===false or @$argv[1]=='-?' or count($argv)<2) {
@@ -228,6 +230,8 @@ if ($par===false or @$argv[1]=='-?' or count($argv)<2) {
 	echo "  -d --dump    Estrae il font come file TXT\n";
 	echo "  -u --update  Converte un font di testo in file binario.\n";
 	echo "  -o           Imposta il file di uscita.\n";
+	echo "  -N           Sostituisce il carattere * sul parametro -o con il nome del file\n";
+	echo "               da leggere.\n";  
 	echo "  -i           Converte un font raw in font92.\n";
 	echo "  -p           Imposta un puntatore per l'inizio della tabella\n";
 	echo "               dei caratteri.\n";
@@ -256,7 +260,18 @@ if (isset($par['show-map'])) {
 	exit;
 	}
 
-if (@!$par['o']) die("Manca -o\n");
+if (isset($par['N'])) {
+	$fi0=false;
+	foreach(array('dump','d','update','u') as $k0) {
+		if (isset($par[$k0]) and $par[$k0]!='') {
+			$fi0=$par[$k0];
+			break;
+			}
+		}
+		
+	if ($fi0===false) die("Errore specifiche file input!\n");
+	$par['o'] = str_replace('*',pathinfo($fi0,PATHINFO_FILENAME),@$par['o']);
+	}
 
 if (isset($par['i']) and isset($par['o'])) {
 	$ptr = isset( $par['p'] ) ? intval($par['p']) : 0;
@@ -368,7 +383,7 @@ if (isset($par['u'])) {
 						$b=trim($b,' ');
 						}
 						
-					if ($test0 or $fase!=0) die("Riga $line: Non era atteso $a\n");
+					if ($test0 or $fase!=0) die("Riga $line: Non era atteso $a\nFile: `{$par['u']}`\n");
 					if ($a=='@CHR') {
 						if (!isset($font['map'])) $font['map']=array();
 						$c=str_replace(array('u','U','-'),'',$c);
@@ -389,7 +404,7 @@ if (isset($par['u'])) {
 						$started=true;
 						$font['font'] = str_pad('',$font['height']*$font['max'],chr(0));
 						}
-					if ($fase!=0) die("Riga $line: Non era atteso @CH\n");
+					if ($fase!=0) die("Riga $line: Non era atteso @CH\nFile: `{$par['u']}`\n");
 					$b = intval($b) % $font['max'];
 					$test0=true;
 					$curY=0;
@@ -400,9 +415,9 @@ if (isset($par['u'])) {
 				continue;
 				}
 			
-			if (strlen($li)!=8) die("Riga $line: Doveva essere lunga 8 caratteri.\n");
-			if ($curY >= $font['height']) die("Riga $line: Il carattere $curCh doveva finire qui.\n");
-			if ($fase!=1) die("Riga $line: Non era atteso un carattere in questo punto.\n");
+			if (strlen($li)!=8) die("Riga $line: Doveva essere lunga 8 caratteri.\nFile: `{$par['u']}`\n");
+			if ($curY >= $font['height']) die("Riga $line: Il carattere $curCh doveva finire qui.\nFile: `{$par['u']}`\n");
+			if ($fase!=1) die("Riga $line: Non era atteso un carattere in questo punto.\nFile: `{$par['u']}`\n");
 			
 			$byte=0;
 			for ($x = 0 ; $x<8;$x++) {
@@ -421,4 +436,4 @@ if (isset($par['u'])) {
 	saveFont($par['o'],$font);
 	}
 
-?> 
+?>

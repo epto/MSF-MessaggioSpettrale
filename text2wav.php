@@ -99,16 +99,19 @@ $FONTINFOSTRUCT = array(		//	Struttura costante per le informazioni sui caratter
 	5	=>	array('ver'         ,1 ) ,
 	6	=>	array('name'        ,0 ) ,
 	7	=>	array('map'         ,0 ) ,
-	8	=>	array('mode'        ,1 ) )
+	8	=>	array('mode'        ,1 ) ,
+	9	=>	array('width'		,1 ) )
 	;
 	
 function charBmp(&$font,$ch) {	// Da carattere a relativa bitmap (Array MxN).
 	$bp = ($ch % $font['max'])*$font['height'];
+	$FW = $font['width'] ? $font['width'] : 8;
+	if ($FW>8) $FW=8;
 	
 	$bmp = substr($font['font'],$bp,$font['height']);
-	$map = array_pad(array(),8,array_pad(array(),$font['height'],0));
+	$map = array_pad(array(),$FW,array_pad(array(),$font['height'],0));
 	for ($y = 0 ;$y<$font['height'];$y++) {
-		for ($x=0;$x<8;$x++) {
+		for ($x=0;$x<$FW;$x++) {
 			$bit = ord($bmp[($font['height']-1) - $y]) & 1<<(7^$x);
 			$map[$x][$y] = $bit ? 1:0;
 			}
@@ -116,9 +119,9 @@ function charBmp(&$font,$ch) {	// Da carattere a relativa bitmap (Array MxN).
 	return $map;
 	}
 
-function addBmp(&$org,$map) {	// Aggiunge alla bitmap finale la bitmap di un carattere.
+function addBmp(&$org,$map,$FW) {	// Aggiunge alla bitmap finale la bitmap di un carattere.
 	$cx = count($org);
-	$dx=$cx+8;
+	$dx=$cx+$FW;
 	$ex=0;
 	for ($i=$cx;$i<$dx;$i++) $org[$i]=$map[$ex++];
 	}
@@ -146,7 +149,7 @@ function data2Map($raw) {	//	Esporta un array nome => valore
 
 function getFontInfo(&$font) {	// Legge il tag delle informazioni sui caratteri.
 	global $FONTINFOSTRUCT;
-	
+	$info['width'] = 8;
 	$bp = strlen($font)-1;
 	if ($bp<6) return false;
 	$t0 = substr($font,$bp-5);
@@ -471,6 +474,8 @@ if (!@$par['f']) die("Manca -f\n");
 
 $font = loadFont($par['f']) or die("\nErrore nel file del font!\n");
 $fontHeight= $font['height'];
+$fontWidth = $font['width'] ? $font['width'] : 8;
+
 if ($correggiFont and $fontHeight==16) {	//	Aggiustamento per font 8x16.
 	$stepFreq=400;
 	$baseFreq=400;
@@ -580,6 +585,7 @@ if ($fBas) { // Elabora la modalità offset con UFFFF
 	}
 	
 $j=count($text)+1;	// Tipico ciclo for per convertire la stringa.
+$FW = $font['width'] ? $font['width'] : 8;
 
 for ($i=1;$i<$j;$i++) {
 	
@@ -591,7 +597,7 @@ for ($i=1;$i<$j;$i++) {
 				}
 			}
 			
-		addBmp($map,charBmp($font,$text[$i]));	// Aggiungi ogni bitmap di ogni carattere alla bitmap finale.
+		addBmp($map,charBmp($font,$text[$i]),$FW);	// Aggiungi ogni bitmap di ogni carattere alla bitmap finale.
 	}
 
 $imgWidth=count($map); // Trova la larghezza della bitmap.

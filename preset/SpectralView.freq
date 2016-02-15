@@ -1,0 +1,9 @@
+@Text2Wave.Freq=V1.0
+@info=Messaggio spettrale per Spectral View (Android)
+@bandWidth=50-7000
+@baseFreq=1000
+@pixelFreq=12
+@stepFreq=150
+@minOverlap=80
+@font=msx-8x8.font
+@noList
