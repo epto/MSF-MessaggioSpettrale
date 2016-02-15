@@ -126,3 +126,9 @@ php text2wav.php -e -f fonts/rcuni-8x16-1628.font -o test.wav -t "TEST \(_invAZ)
 ```
 
 Buoni messaggi antanici a tutti e la supercazzola alla prematurata con scappellamento a sinistra.
+
+### Personalizzare i caratteri (font):
+
+Per questo consiglio di diare un'occhiata alla directory tools-font.
+Troverai i programmi per creare, convertire, modificare i font e... naturalmente i codici sorgente dei font.
+
